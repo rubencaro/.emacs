@@ -5,24 +5,11 @@
 ;;
 
 ;; TODO:
-;;   use PROMPT_COMMAND='printf "\033]0;hola\007"' to set term title on project switch
-
-  ;; (defun xterm-title-update ()
-  ;;   (interactive)
-  ;;   (send-string-to-terminal (concat "\033]1; " (buffer-name) "\007"))
-  ;;   (if buffer-file-name
-  ;;       (send-string-to-terminal (concat "\033]2; " (buffer-file-name) "\007"))
-  ;;       (send-string-to-terminal (concat "\033]2; " (buffer-name) "\007"))))
-
-  ;; (add-hook 'post-command-hook 'xterm-title-update)
-
-
 ;;   use current project name to save desktop to a separate file
 ;;   binding for pgup pgdown to a real text scroll
 ;;   bindings for git-gutter/ediff
 ;;   bindings for neotree
 ;;   use ctags everywhere possible
-;;   auto follow links
 ;;   auto label bookmarks
 
 (custom-set-variables
@@ -40,7 +27,8 @@
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa" . "http://melpa.milkbox.net/packages/"))))
- '(safe-local-variable-values (quote ((encoding . utf-8)))))
+ '(safe-local-variable-values (quote ((encoding . utf-8))))
+ '(vc-follow-symlinks nil))
 
 ;; F10    to see menu
 ;; C-h b  to see current bindings
@@ -50,8 +38,8 @@
 (cua-mode)
 (global-set-key (kbd "C-d") 'kill-whole-line)
 (global-set-key "\M-<" 'comment-dwim)
-(global-set-key (kbd "C-s") 'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-r") 'query-replace)
+(global-set-key (kbd "C-s") 'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-e") 'isearch-forward)
 (global-set-key (kbd "C-w") 'isearch-forward-word)
 (global-set-key (kbd "C-f") 'find-file)
@@ -61,6 +49,9 @@
 (global-set-key (kbd "C-b") 'bookmark-jump)
 (global-set-key (kbd "M-b") 'bookmark-set)
 (global-set-key (kbd "C-x b") 'bookmark-bmenu-list)
+
+;; avoid dired garbage
+(put 'dired-find-alternate-file 'disabled nil)
 
 ;; sessions
 ;; Automatically save and restore sessions
@@ -253,6 +244,7 @@
   (ignore-errors (package-install 'undo-tree))
   (ignore-errors (package-install 'zoom-window))
   (ignore-errors (package-install 'popup-switcher))
+  (ignore-errors (package-install 'ac-helm))
   (message "All packages should be installed now")
 )
 
@@ -347,9 +339,17 @@
   (helm-autoresize-mode 1)
 )
 
-;; (defun set-term-title()
-;;   ;;PROMPT_COMMAND='printf "\033]0;hola\007"'
-;;   )
+(defun set-term-title()
+  (interactive)
+  (send-string-to-terminal (concat "\033]0; " (projectile-project-name) "\007"))
+)
+
+(defun custom-project-switch-action ()
+  (interactive)
+  (set-term-title)
+  (neotree-projectile-action)
+  (projectile-find-file)
+)
 
 (ignore-errors
   ;; https://github.com/bbatsov/projectile
@@ -361,9 +361,17 @@
   (global-set-key (kbd "C-M-p") 'helm-projectile-switch-project)
   (global-set-key (kbd "C-x C-g") 'helm-projectile-grep)
   ;; require neotree too
-  (setq projectile-switch-project-action 'neotree-projectile-action)
-  ;;(setq projectile-switch-project-action 'set-term-title)
+  (setq projectile-switch-project-action 'custom-project-switch-action)
 )
+
+(ignore-errors
+  (require 'ac-helm)  ;; Not necessary if using ELPA package
+  ;; (global-set-key (kbd "C-SPC") 'ac-complete-with-helm) ;
+  ;; (define-key ac-complete-mode-map (kbd "C-SPC") 'ac-complete-with-helm)
+  (global-set-key "\M->" 'ac-complete-with-helm)
+  (define-key ac-complete-mode-map "\M->" 'ac-complete-with-helm)
+)
+
 
 (ignore-errors
   ;; xclip
@@ -410,7 +418,6 @@
   ;; tweaks to make it fit on X
 
   )
-(put 'dired-find-alternate-file 'disabled nil)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
