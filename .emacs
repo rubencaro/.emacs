@@ -5,7 +5,7 @@
 ;;
 
 ;; TODO:
-;;   use current project name to save desktop to a separate file
+;;   session management: use current project name to save desktop to a separate file
 ;;   binding for pgup pgdown to a real text scroll
 ;;   bindings for git-gutter/ediff
 ;;   bindings for neotree
@@ -19,6 +19,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(bookmark-sort-flag nil)
  '(custom-enabled-themes (quote (tsdh-dark)))
  '(dired-hide-details-hide-symlink-targets nil)
  '(ediff-keep-variants nil)
@@ -52,29 +53,6 @@
 
 ;; avoid dired garbage
 (put 'dired-find-alternate-file 'disabled nil)
-
-;; sessions
-;; Automatically save and restore sessions
-(setq desktop-dirname             "~/.emacs.d/desktop/"
-      desktop-base-file-name      "emacs.desktop"
-      desktop-base-lock-name      "lock"
-      desktop-path                (list desktop-dirname)
-      desktop-save                t
-      desktop-files-not-to-save   "^$" ;reload tramp paths
-      desktop-load-locked-desktop nil)
-(desktop-save-mode 0) ;; deactivated if meant to be loaded manually
-
-
-(defun load-desktop ()
-  "Load the desktop and enable autosaving"
-  (interactive)
-  (let ((desktop-load-locked-desktop "ask"))
-    (shell-command "mkdir -p ~/.emacs.d/desktop")
-    (desktop-read)
-    (desktop-save-mode 1)))
-
-(global-set-key (kbd "<f12>") 'load-desktop)
-(global-set-key (kbd "<f24>") 'desktop-save-in-desktop-dir)
 
 ;; avoid default manuals screen
 (setq inhibit-splash-screen t)
@@ -220,7 +198,6 @@
 ;;;
 ;; anything that may fail when landing on strange planets
 
-
 ;; be able to load packages
 (setq package-enable-at-startup nil)
 (package-initialize)
@@ -347,7 +324,7 @@
 (defun custom-project-switch-action ()
   (interactive)
   (set-term-title)
-  (neotree-projectile-action)
+  ;;(neotree-projectile-action)
   (projectile-find-file)
 )
 
@@ -372,6 +349,42 @@
   (define-key ac-complete-mode-map "\M->" 'ac-complete-with-helm)
 )
 
+;; sessions
+(desktop-save-mode 0) ;; deactivated if meant to be loaded manually
+
+;; (defun setup-desktop ()
+;;   "Setup desktop variables according to current project"
+;;   (interactive)
+;;   (shell-command "mkdir -p ~/.emacs.d/desktop") ;; default one
+;;   (setq desktop-dirname             "~/.emacs.d/desktop/"
+;;         desktop-base-file-name      "emacs.desktop"
+;;         desktop-base-lock-name      "lock"
+;;         desktop-path                (list desktop-dirname)
+;;         desktop-save                t
+;;         desktop-files-not-to-save   "^$" ;reload tramp paths
+;;         desktop-load-locked-desktop nil)
+;;   (ignore-errors  ;; try to setup everything if we have projectile working
+;;     (shell-command (concat "mkdir -p ~/.emacs.d/desktop/" (projectile-project-name)))
+;;     (setq desktop-dirname             (concat "~/.emacs.d/desktop/" (projectile-project-name) "/")
+;;           desktop-path                (list desktop-dirname)))
+;;   )
+
+;; (defun load-desktop ()
+;;   "Load the desktop for the current project and enable autosaving"
+;;   (interactive)
+;;   (let ((desktop-load-locked-desktop "ask"))
+;;     (setup-desktop)
+;;     (desktop-read)
+;;     (desktop-save-mode 1)))
+
+;; (defun save-desktop ()
+;;   "Save the current desktop"
+;;   (interactive)
+;;   (setup-desktop)
+;;   (desktop-save-in-desktop-dir))
+
+;; (global-set-key (kbd "<f12>") 'load-desktop)
+;; (global-set-key (kbd "<f24>") 'save-desktop)
 
 (ignore-errors
   ;; xclip
