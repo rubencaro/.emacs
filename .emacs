@@ -1,12 +1,29 @@
+;;
+;; USAGE:
+;;    It should be useful enough just as is. Just read the bindings on the code below.
+;;    But if you want it to be nice, then run M-x install-all to install every needed package.
+;;
 
 ;; TODO:
 ;;   use PROMPT_COMMAND='printf "\033]0;hola\007"' to set term title on project switch
+
+  ;; (defun xterm-title-update ()
+  ;;   (interactive)
+  ;;   (send-string-to-terminal (concat "\033]1; " (buffer-name) "\007"))
+  ;;   (if buffer-file-name
+  ;;       (send-string-to-terminal (concat "\033]2; " (buffer-file-name) "\007"))
+  ;;       (send-string-to-terminal (concat "\033]2; " (buffer-name) "\007"))))
+
+  ;; (add-hook 'post-command-hook 'xterm-title-update)
+
+
 ;;   use current project name to save desktop to a separate file
 ;;   binding for pgup pgdown to a real text scroll
 ;;   bindings for git-gutter/ediff
 ;;   bindings for neotree
 ;;   use ctags everywhere possible
-
+;;   auto follow links
+;;   auto label bookmarks
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -219,6 +236,8 @@
 
 ;; install every package to get the full pack
 (defun install-all()
+  (interactive)
+  (package-refresh-contents)
   (ignore-errors (package-install 'git-gutter+))
   (ignore-errors (package-install 'popwin))
   (ignore-errors (package-install 'helm))
@@ -234,7 +253,8 @@
   (ignore-errors (package-install 'undo-tree))
   (ignore-errors (package-install 'zoom-window))
   (ignore-errors (package-install 'popup-switcher))
-  )
+  (message "All packages should be installed now")
+)
 
 (ignore-errors
   ;; https://github.com/nonsequitur/git-gutter-plus
