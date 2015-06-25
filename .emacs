@@ -325,7 +325,8 @@
 (defun custom-project-switch-action ()
   (interactive)
   (set-term-title)
-  ;;(neotree-projectile-action)
+  (neotree-dir (projectile-project-root))
+  (neotree-hide)
   (projectile-find-file)
 )
 
