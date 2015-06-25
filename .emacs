@@ -7,7 +7,6 @@
 ;; TODO:
 ;;   session management: use current project name to save desktop to a separate file
 ;;   binding for pgup pgdown to a real text scroll
-;;   bindings for git-gutter/ediff
 ;;   bindings for neotree
 ;;   use ctags everywhere possible
 ;;   auto label bookmarks
@@ -165,7 +164,9 @@
 ;;(global-set-key (kbd "C-<down>") 'previous-buffer)
 
 ;; see diff
-(global-set-key (kbd "<f8>") 'ediff-revision)
+(global-set-key (kbd "<f8>") 'git-gutter+-next-hunk)
+(global-set-key (kbd "S-<f8>") 'git-gutter+-popup-hunk)
+(global-set-key (kbd "M-<f8>") 'git-gutter+-revert-hunk)
 
 ;; no trailing whitespaces
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
