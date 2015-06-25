@@ -7,9 +7,10 @@
 ;; TODO:
 ;;   session management: use current project name to save desktop to a separate file
 ;;   binding for pgup pgdown to a real text scroll
-;;   bindings for neotree
 ;;   use ctags everywhere possible
 ;;   auto label bookmarks
+;;   github bindings (maybe using gh)
+;;   use git-link
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -44,11 +45,16 @@
 (global-set-key (kbd "C-w") 'isearch-forward-word)
 (global-set-key (kbd "C-f") 'find-file)
 (global-set-key (kbd "M-f") 'find-name-dired)
+(global-set-key (kbd "C-l") 'goto-line)
 
 ;; bookmarks
 (global-set-key (kbd "C-b") 'bookmark-jump)
 (global-set-key (kbd "M-b") 'bookmark-set)
 (global-set-key (kbd "C-x b") 'bookmark-bmenu-list)
+
+;; highlights
+(global-set-key (kbd "<f6>") 'highlight-regexp)
+(global-set-key (kbd "C-<f6>") 'unhighlight-regexp)
 
 ;; avoid dired garbage
 (put 'dired-find-alternate-file 'disabled nil)
@@ -89,7 +95,7 @@
 
 ;; line numbers
 (global-set-key (kbd "<f5>") 'linum-mode)
-(global-linum-mode 1)
+;;(global-linum-mode 1)
 
 ;; Disable line numbers in certain buffers
 (defcustom linum-disabled-modes-list '(eshell-mode wl-summary-mode compilation-mode org-mode dired-mode)
@@ -105,7 +111,7 @@
     (linum-mode 1)))
 
 ;; mouse machinery
-;;(global-set-key (kbd "<f2>") 'xterm-mouse-mode)
+(global-set-key (kbd "<f2>") 'xterm-mouse-mode)
 (xterm-mouse-mode)
 
 ;; hide menu bar, use f10 to use it anyway
@@ -216,6 +222,7 @@
   (ignore-errors (package-install 'move-dup))
   (ignore-errors (package-install 'neotree))
   (ignore-errors (package-install 'web-mode))
+  (ignore-errors (package-install 'scss-mode))
   (ignore-errors (package-install 'elixir-mode))
   (ignore-errors (package-install 'markdown-mode))
   (ignore-errors (package-install 'xclip))
@@ -223,7 +230,18 @@
   (ignore-errors (package-install 'zoom-window))
   (ignore-errors (package-install 'popup-switcher))
   (ignore-errors (package-install 'ac-helm))
+  (ignore-errors (package-install 'ctags))
+  (ignore-errors (package-install 'auto-complete-exuberant-ctags))
   (message "All packages should be installed now")
+)
+
+(ignore-errors
+  (require 'ctags)
+  (setq tags-revert-without-query t)
+  (global-set-key (kbd "<f7>") 'ctags-create-or-update-tags-table)
+  (global-set-key (kbd "M-.")  'ctags-search)
+  (require 'auto-complete-exuberant-ctags)
+  (ac-exuberant-ctags-setup)
 )
 
 (ignore-errors
