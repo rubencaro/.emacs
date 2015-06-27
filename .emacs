@@ -23,6 +23,11 @@
  '(dired-hide-details-hide-symlink-targets nil)
  '(ediff-keep-variants nil)
  '(ediff-split-window-function (quote split-window-horizontally))
+ '(mode-line-format
+   (quote
+    ("%e" "%*" mode-line-remote " " mode-line-buffer-identification " " mode-line-position
+     (vc-mode vc-mode)
+     " " mode-line-modes mode-line-misc-info mode-line-end-spaces)))
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
@@ -369,8 +374,8 @@
   (global-set-key (kbd "C-p") 'helm-projectile-find-file)
   (global-set-key (kbd "C-M-p") 'helm-projectile-switch-project)
   (global-set-key (kbd "C-x C-g") 'helm-projectile-grep)
-  ;; require neotree too
   (setq projectile-switch-project-action 'custom-project-switch-action)
+  (setq projectile-mode-line '(:eval (format "[%s]" (projectile-project-name))))
 )
 
 (ignore-errors
