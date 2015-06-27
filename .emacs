@@ -7,7 +7,6 @@
 ;; TODO:
 ;;   session management: use current project name to save desktop to a separate file
 ;;   binding for pgup pgdown to a real text scroll
-;;   use ctags everywhere possible
 ;;   auto label bookmarks
 ;;   github bindings (maybe using gh)
 ;;   use git-link
@@ -171,8 +170,9 @@
 
 ;; see diff
 (global-set-key (kbd "<f8>") 'git-gutter+-next-hunk)
-(global-set-key (kbd "S-<f8>") 'git-gutter+-popup-hunk)
-(global-set-key (kbd "M-<f8>") 'git-gutter+-revert-hunk)
+(global-set-key (kbd "S-<f8>") 'git-gutter+-previous-hunk)
+(global-set-key (kbd "M-<f8>") 'git-gutter+-popup-hunk)
+(global-set-key (kbd "C-x <f8>") 'git-gutter+-revert-hunk)
 
 ;; no trailing whitespaces
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -230,19 +230,19 @@
   (ignore-errors (package-install 'zoom-window))
   (ignore-errors (package-install 'popup-switcher))
   (ignore-errors (package-install 'ac-helm))
-  (ignore-errors (package-install 'ctags))
-  (ignore-errors (package-install 'auto-complete-exuberant-ctags))
+  ;; (ignore-errors (package-install 'ctags))
+  ;; (ignore-errors (package-install 'auto-complete-exuberant-ctags))
   (message "All packages should be installed now")
 )
 
-(ignore-errors
-  (require 'ctags)
-  (setq tags-revert-without-query t)
-  (global-set-key (kbd "<f7>") 'ctags-create-or-update-tags-table)
-  (global-set-key (kbd "M-.")  'ctags-search)
-  (require 'auto-complete-exuberant-ctags)
-  (ac-exuberant-ctags-setup)
-)
+;; (ignore-errors
+;;   (require 'ctags)
+;;   (setq tags-revert-without-query t)
+;;   (global-set-key (kbd "<f7>") 'ctags-create-or-update-tags-table)
+;;   (global-set-key (kbd "M-.")  'ctags-search)
+;;   (require 'auto-complete-exuberant-ctags)
+;;   (ac-exuberant-ctags-setup)
+;; )
 
 (ignore-errors
   ;; https://github.com/nonsequitur/git-gutter-plus
@@ -333,6 +333,7 @@
   (require 'helm-config)
   (helm-mode 1)
   (helm-autoresize-mode 1)
+  (helm-adaptive-mode 1)
 )
 
 (defun set-term-title()
