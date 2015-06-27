@@ -45,6 +45,7 @@
 (global-set-key (kbd "C-f") 'find-file)
 (global-set-key (kbd "M-f") 'find-name-dired)
 (global-set-key (kbd "C-l") 'goto-line)
+(global-set-key (kbd "C-x s") 'save-buffer) ;; stop asking
 
 ;; bookmarks
 (global-set-key (kbd "C-b") 'bookmark-jump)
@@ -60,6 +61,9 @@
 
 ;; avoid default manuals screen
 (setq inhibit-splash-screen t)
+
+;; smoother scrolling
+(setq scroll-conservatively 10000)
 
 ;; nice grep
 (global-set-key (kbd "C-g") 'rgrep)
@@ -184,6 +188,7 @@
 
 ;; no wrap
 (set-default 'truncate-lines t)
+(global-set-key (kbd "<f3>") 'toggle-truncate-lines)
 
 ;; nice unique names for buffers
 (require 'uniquify)
@@ -233,6 +238,10 @@
   ;; (ignore-errors (package-install 'ctags))
   ;; (ignore-errors (package-install 'auto-complete-exuberant-ctags))
   (message "All packages should be installed now")
+)
+
+(ignore-errors
+  (add-hook 'markdown-mode-hook (lambda () (toggle-truncate-lines t)))
 )
 
 ;; (ignore-errors
@@ -310,6 +319,8 @@
   (defun ac-common-setup ()
     (setq ac-sources (append ac-sources '(ac-source-words-in-all-buffer))))
   (ignore-errors (add-to-list 'ac-modes 'elixir-mode)) ;; add new modes to auto-complete
+  (ignore-errors (add-to-list 'ac-modes 'markdown-mode))
+  (ignore-errors (add-to-list 'ac-modes 'scss-mode))
 )
 
 (ignore-errors
