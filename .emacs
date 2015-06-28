@@ -23,11 +23,6 @@
  '(dired-hide-details-hide-symlink-targets nil)
  '(ediff-keep-variants nil)
  '(ediff-split-window-function (quote split-window-horizontally))
- '(mode-line-format
-   (quote
-    ("%e" "%*" mode-line-remote " " mode-line-buffer-identification " " mode-line-position
-     (vc-mode vc-mode)
-     " " mode-line-modes mode-line-misc-info mode-line-end-spaces)))
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
@@ -69,6 +64,17 @@
 
 ;; smoother scrolling
 (setq scroll-conservatively 10000)
+
+;; cleaner mode-line
+(setq-default mode-line-format '("%e"
+                                mode-line-modified
+                                mode-line-remote
+                                " " mode-line-buffer-identification
+                                " " mode-line-position
+                                (vc-mode vc-mode)
+                                " " mode-line-modes
+                                mode-line-misc-info
+                                mode-line-end-spaces))
 
 ;; nice grep
 (global-set-key (kbd "C-g") 'rgrep)
@@ -262,6 +268,7 @@
   ;; https://github.com/nonsequitur/git-gutter-plus
   (global-git-gutter+-mode t)
   (global-set-key (kbd "C-x <f5>") 'git-gutter+-mode) ; Turn on/off in the current buffer
+  (setq git-gutter+-lighter "")
 )
 
 (ignore-errors
@@ -297,6 +304,7 @@
   (global-set-key (kbd "C-z") 'undo)
   (global-set-key (kbd "M-z") 'redo)
   (global-set-key (kbd "C-M-z") 'undo-tree-visualize)
+  (setq undo-tree-mode-lighter "")
 )
 
 ;; so slow on big files !!
@@ -326,6 +334,9 @@
   (ignore-errors (add-to-list 'ac-modes 'elixir-mode)) ;; add new modes to auto-complete
   (ignore-errors (add-to-list 'ac-modes 'markdown-mode))
   (ignore-errors (add-to-list 'ac-modes 'scss-mode))
+  ;; clean mode-line
+  (setq minor-mode-alist (assq-delete-all 'auto-complete-mode minor-mode-alist))
+  (add-to-list 'minor-mode-alist '(auto-complete-mode ""))
 )
 
 (ignore-errors
@@ -350,6 +361,7 @@
   (helm-mode 1)
   (helm-autoresize-mode 1)
   (helm-adaptive-mode 1)
+  (setq helm-completion-mode-string "")
 )
 
 (defun set-term-title()
@@ -375,15 +387,13 @@
   (global-set-key (kbd "C-M-p") 'helm-projectile-switch-project)
   (global-set-key (kbd "C-x C-g") 'helm-projectile-grep)
   (setq projectile-switch-project-action 'custom-project-switch-action)
-  (setq projectile-mode-line '(:eval (format "[%s]" (projectile-project-name))))
+  (setq projectile-mode-line (quote (:eval (format "[%s]" (projectile-project-name)))))
 )
 
 (ignore-errors
-  (require 'ac-helm)  ;; Not necessary if using ELPA package
-  ;; (global-set-key (kbd "C-SPC") 'ac-complete-with-helm) ;
-  ;; (define-key ac-complete-mode-map (kbd "C-SPC") 'ac-complete-with-helm)
-  (global-set-key "\M->" 'ac-complete-with-helm)
-  (define-key ac-complete-mode-map "\M->" 'ac-complete-with-helm)
+  (require 'ac-helm)
+  (global-set-key (kbd "M-.") 'ac-complete-with-helm)
+  (define-key ac-complete-mode-map (kbd "M-.") 'ac-complete-with-helm)
 )
 
 ;; sessions
