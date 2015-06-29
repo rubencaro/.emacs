@@ -7,7 +7,6 @@
 ;; TODO:
 ;;   session management: use current project name to save desktop to a separate file
 ;;   binding for pgup pgdown to a real text scroll
-;;   auto label bookmarks
 ;;   github bindings (maybe using gh)
 ;;   use git-link
 
@@ -38,18 +37,37 @@
 (cua-mode)
 (global-set-key (kbd "C-d") 'kill-whole-line)
 (global-set-key "\M-<" 'comment-dwim)
-(global-set-key (kbd "C-r") 'query-replace-regexp)
+
+;; search and replace (C-r to reverse search after started)
 (global-set-key (kbd "C-s") 'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-e") 'isearch-forward)
 (global-set-key (kbd "C-w") 'isearch-forward-word)
+(global-set-key (kbd "C-r") 'query-replace-regexp)
+
+;; find
 (global-set-key (kbd "C-f") 'find-file)
 (global-set-key (kbd "M-f") 'find-name-dired)
 (global-set-key (kbd "C-l") 'goto-line)
+
 (global-set-key (kbd "C-x s") 'save-buffer) ;; stop asking
 
 ;; bookmarks
+(defun get-bookmark-label ()
+  (interactive)
+  (concat
+   (buffer-substring-no-properties (line-beginning-position) (line-end-position))
+   " at "
+   (bookmark-buffer-name) ":" (number-to-string (line-number-at-pos))
+   ))
+
+(defun bookmark-set-and-label ()
+  "Set a bookmark at the current position and label it with
+   the whole current line text and location"
+  (interactive)
+  (bookmark-set (get-bookmark-label)))
+
 (global-set-key (kbd "C-b") 'bookmark-jump)
-(global-set-key (kbd "M-b") 'bookmark-set)
+(global-set-key (kbd "M-b") 'bookmark-set-and-label)
 (global-set-key (kbd "C-x b") 'bookmark-bmenu-list)
 
 ;; highlights
@@ -68,7 +86,7 @@
 ;; smoother scrolling
 (setq scroll-conservatively 10000)
 
-;;insert newline char
+;; insert newline char
 (define-key isearch-mode-map (kbd "M-RET")
   '(lambda ()(interactive)(isearch-process-search-char ?\n)))
 
