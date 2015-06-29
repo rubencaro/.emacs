@@ -38,7 +38,7 @@
 (cua-mode)
 (global-set-key (kbd "C-d") 'kill-whole-line)
 (global-set-key "\M-<" 'comment-dwim)
-(global-set-key (kbd "C-r") 'query-replace)
+(global-set-key (kbd "C-r") 'query-replace-regexp)
 (global-set-key (kbd "C-s") 'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-e") 'isearch-forward)
 (global-set-key (kbd "C-w") 'isearch-forward-word)
@@ -64,6 +64,10 @@
 
 ;; smoother scrolling
 (setq scroll-conservatively 10000)
+
+;;insert newline char
+(define-key isearch-mode-map (kbd "M-RET")
+  '(lambda ()(interactive)(isearch-process-search-char ?\n)))
 
 ;; cleaner mode-line
 (setq-default mode-line-format '("%e"
@@ -280,7 +284,7 @@
 (ignore-errors
   ;; https://github.com/kostafey/popup-switcher
   (require 'popup-switcher)
-  (global-set-key (kbd "C-q") 'psw-switch-buffer)
+  (global-set-key (kbd "M-q") 'psw-switch-buffer)
 )
 
 (ignore-errors
