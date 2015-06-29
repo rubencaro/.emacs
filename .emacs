@@ -62,6 +62,9 @@
 ;; avoid default manuals screen
 (setq inhibit-splash-screen t)
 
+;; auto revert on file changes
+(global-auto-revert-mode)
+
 ;; smoother scrolling
 (setq scroll-conservatively 10000)
 
