@@ -96,13 +96,16 @@
                                 mode-line-remote
                                 " " mode-line-buffer-identification
                                 " " mode-line-position
+                                "[" ((:eval (ignore-errors (projectile-project-name)))) "]"
                                 (vc-mode vc-mode)
-                                " " mode-line-modes
-                                mode-line-misc-info
                                 mode-line-end-spaces))
+                                ;; " " mode-line-modes
+                                ;; mode-line-misc-info
+                                ;; mode-line-end-spaces))
 
 ;; header-line
-(setq-default header-line-format '( ((:eval (or (buffer-file-name) (buffer-name)))) ))
+(setq-default header-line-format '( ((:eval (abbreviate-file-name (or (buffer-file-name) (buffer-name)))))
+                                    "  %I" mode-line-end-spaces))
 
 ;; nice grep
 (global-set-key (kbd "C-g") 'rgrep)
