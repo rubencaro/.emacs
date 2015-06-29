@@ -101,6 +101,9 @@
                                 mode-line-misc-info
                                 mode-line-end-spaces))
 
+;; header-line
+(setq-default header-line-format '( ((:eval (or (buffer-file-name) (buffer-name)))) ))
+
 ;; nice grep
 (global-set-key (kbd "C-g") 'rgrep)
 (eval-after-load "grep"
