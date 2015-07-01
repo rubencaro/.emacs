@@ -38,6 +38,15 @@
 (global-set-key (kbd "C-d") 'kill-whole-line)
 (global-set-key "\M-<" 'comment-dwim)
 
+;; create new empty buffer
+(defun make-empty-buffer ()
+  (interactive)
+  (let ((buf (generate-new-buffer "untitled")))
+    (switch-to-buffer buf)
+    (funcall (and initial-major-mode))
+    (setq buffer-offer-save t)))
+(global-set-key (kbd "C-n") 'make-empty-buffer)
+
 ;; search and replace (C-r to reverse search after started)
 (global-set-key (kbd "C-s") 'isearch-forward-symbol-at-point)
 (global-set-key (kbd "C-e") 'isearch-forward)
