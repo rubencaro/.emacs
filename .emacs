@@ -6,7 +6,6 @@
 
 ;; TODO:
 ;;   session management: use current project name to save desktop to a separate file
-;;   binding for pgup pgdown to a real text scroll
 ;;   github bindings (maybe using gh)
 ;;   use git-link
 
