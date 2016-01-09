@@ -58,6 +58,7 @@
 (global-set-key (kbd "C-l") 'goto-line)
 
 (global-set-key (kbd "C-x s") 'save-buffer) ;; stop asking
+(global-set-key (kbd "C-x q") 'save-buffers-kill-terminal)
 
 ;; bookmarks
 (defun get-bookmark-label ()
@@ -167,6 +168,9 @@
 ;; hide menu bar, use f10 to use it anyway
 (menu-bar-mode -1)
 
+;; hide toolbar, always
+(tool-bar-mode -1)
+
 ;; C-x 1 to close other windows
 ;; C-x 2 to split horizontal
 ;; C-x 3 to split vertical
@@ -198,7 +202,7 @@
     (while
         (and
          (or (string-match-p "^\*" (buffer-name))
-             ;;(string-match-p "dired-mode" (format "%s" (buffer-mode)) )
+             (string-match-p "dired-mode" (format "%s" (buffer-mode)) )
              )
          (not ( equal bread-crumb (buffer-name) )) )
       (next-buffer))))
@@ -212,7 +216,7 @@
     (while
         (and
          (or (string-match-p "^\*" (buffer-name))
-             ;;(string-match-p "dired-mode" (format "%s" (buffer-mode)) )
+             (string-match-p "dired-mode" (format "%s" (buffer-mode)) )
              )
          (not ( equal bread-crumb (buffer-name) )) )
       (previous-buffer))))
